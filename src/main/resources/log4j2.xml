@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="30">
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout pattern="%d{ABSOLUTE} [%p]: %m (%C)%n" />
+        </Console>
+        <RollingFile name="File" fileName="logs\application.log" filePattern="logs\application-%i.log">
+            <PatternLayout pattern="%d{ABSOLUTE} [%p]: %m (%C)%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250MB" />
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" max="2" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="cga.competition" level="debug" additivity="false">
+            <!--<AppenderRef ref="File" />-->
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Root level="fatal">
+            <!--<AppenderRef ref="File" />-->
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
