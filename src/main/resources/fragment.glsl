@@ -2,9 +2,11 @@
 
 in vec2 gfTexCoord;
 
+uniform sampler2D albedoSampler;
+
 out vec4 fsColor;
 
 void main()
 {
-    fsColor = vec4(1, 0, 0, 1);
+    fsColor = texture2D(albedoSampler, gfTexCoord);
 }

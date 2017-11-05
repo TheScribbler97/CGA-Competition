@@ -2,6 +2,7 @@ package cga.competition;
 
 import cga.competition.gl.Mesh;
 import cga.competition.gl.ShaderProgram;
+import cga.competition.gl.Texture;
 import cga.competition.glfw.Window;
 import cga.competition.math.Mat;
 import org.apache.logging.log4j.LogManager;
@@ -30,9 +31,9 @@ public class Main
 		glEnable(GL_DEPTH_TEST);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glPointSize(3);
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
-		//glFrontFace(GL_CCW);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
 		
 		logger.debug("Creating shader program");
 		try
@@ -48,11 +49,12 @@ public class Main
 		logger.debug("Creating mesh");
 		Mesh mesh = new Mesh(new float[]
 		{
-			0,0,0,0,0,
-			1,0,0,0,0,
-			2,0,0,0,0,
-			3,0,0,0,0
+			0,0,0, 0,0.25f, 0.25f,0, 0.5f,0.25f, 0.5f,0, 0.25f,0.25f, 0,0,
+			1,0,0, 0,0.25f, 0.25f,0, 0.5f,0.25f, 0.5f,0, 0.25f,0.25f, 0,0,
+			2,0,0, 0,0.25f, 0.25f,0, 0.5f,0.25f, 0.5f,0, 0.25f,0.25f, 0,0,
+			3,0,0, 0,0.25f, 0.25f,0, 0.5f,0.25f, 0.5f,0, 0.25f,0.25f, 0,0
 		});
+		Texture texture = new Texture("texture.png", Texture.TextureType.ALBEDO);
 		
 		window.setOnResize((w,h)->
 		{
@@ -65,11 +67,12 @@ public class Main
 		float camZ = -5;
 		
 		program.activate();
-		glUniformMatrix4fv(glGetUniformLocation(program.id,"model"), true, new Mat(4,4).toArray());
-		glUniformMatrix4fv(glGetUniformLocation(program.id,"view"), true, Mat.createTranslationMatrix(camX,camY,camZ).toArray());
+		glUniformMatrix4fv(glGetUniformLocation(program.id,"view"), true, Mat.multiply(Mat.createTranslationMatrix(camX,camY,camZ),Mat.createRotationMatrix(0,180,0)).toArray());
 		glUniformMatrix4fv(glGetUniformLocation(program.id,"projection"), true, Mat.createProjectionMatrix(80f,16f/9f,0.001f, 1000f).toArray());
 		glUniform1f(glGetUniformLocation(program.id,"blockSize"), 0.2f);
 		glUniform3fv(glGetUniformLocation(program.id,"camPos"), new float[]{-camX, -camY, -camZ});
+		glUniform1f(glGetUniformLocation(program.id,"albedoSampler"), Texture.TextureType.ALBEDO.getUnit());
+		glUniform1f(glGetUniformLocation(program.id,"textureBlockSize"), 0.25f);
 		program.deactivate();
 		
 		logger.debug("Looping...");
@@ -77,9 +80,11 @@ public class Main
 		{
 			window.update();
 			program.activate();
+			texture.activate();
 			mesh.activate();
 			mesh.render();
 			mesh.deactivate();
+			texture.deactivate();
 			program.deactivate();
 			
 			if(window.isPressed(GLFW.GLFW_KEY_W))
@@ -97,7 +102,7 @@ public class Main
 			
 			program.activate();
 			glUniformMatrix4fv(glGetUniformLocation(program.id,"model"), true, new Mat(4,4).toArray());
-			glUniformMatrix4fv(glGetUniformLocation(program.id,"view"), true, Mat.createTranslationMatrix(camX, camY, camZ).toArray());
+			glUniformMatrix4fv(glGetUniformLocation(program.id,"view"), true, Mat.multiply(Mat.createTranslationMatrix(camX, camY, camZ),Mat.createRotationMatrix(0,180,0)).toArray());
 			glUniform3fv(glGetUniformLocation(program.id,"camPos"), new float[]{-camX, -camY, -camZ});
 			program.deactivate();
 		}

@@ -26,12 +26,22 @@ public class Mesh implements Activatable, Disposable
 		glBindVertexArray(vaoId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, verticesData, GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * Float.BYTES, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 15 * Float.BYTES, 0);
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * Float.BYTES, 3 * Float.BYTES);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 15 * Float.BYTES, 3 * Float.BYTES);
 		glEnableVertexAttribArray(1);
-		/*glVertexAttribPointer(2, 3, GL_FLOAT, false, 8 * Float.BYTES, 5 * Float.BYTES);
-		glEnableVertexAttribArray(2);*/
+		glVertexAttribPointer(2, 2, GL_FLOAT, false, 15 * Float.BYTES, 5 * Float.BYTES);
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(3, 2, GL_FLOAT, false, 15 * Float.BYTES, 7 * Float.BYTES);
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(4, 2, GL_FLOAT, false, 15 * Float.BYTES, 9 * Float.BYTES);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(5, 2, GL_FLOAT, false, 15 * Float.BYTES, 11 * Float.BYTES);
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(6, 2, GL_FLOAT, false, 15 * Float.BYTES, 13 * Float.BYTES);
+		glEnableVertexAttribArray(6);
+		/*glVertexAttribPointer(7, 3, GL_FLOAT, false, 18 * Float.BYTES, 15 * Float.BYTES);
+		glEnableVertexAttribArray(7);*/
 		glBindVertexArray(0);
 	}
 	
